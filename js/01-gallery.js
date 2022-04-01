@@ -7,8 +7,6 @@ const createGallary = createGalleryMarkup(galleryItems);
 
 blockGallery.insertAdjacentHTML('beforeend', createGallary);
 
-blockGallery.addEventListener('click', onBlockGalleryClick);
-
 function createGalleryMarkup(imgs) {
   return imgs
     .map(({ preview, original, description }) => {
@@ -26,18 +24,31 @@ function createGalleryMarkup(imgs) {
     .join('');
 }
 
-function onBlockGalleryClick(evt) {
+blockGallery.onclick = evt => {
   if (!evt.target.classList.contains('gallery__image')) {
     return;
   }
-  console.log(evt.target.dataset.source);
-  blockGallery.onclick = () => {
-    basicLightbox
-      .create(
-        `
+  basicLightbox
+    .create(
+      `
 		<img width="1400" height="900" src="${evt.target.dataset.source}">
 	`
-      )
-      .show();
-  };
-}
+    )
+    .show();
+  document.body.addEventListener('keydown', e => {
+    if (e.key === 'Escape') basicLightbox.visible();
+  });
+};
+// window.addEventListener('keydown', onClose);
+// export const onCloseEsc = instance => {
+//   blockGallery = e => {
+//     if (esc(e.keyCode) === true) instance.close;
+//   };
+//   console.log(blockGallery);
+// };
+
+// export const closeOnEsc = instance => {
+//   document.onkeydown = e => {
+//     if (esc(e.keyCode) === true) instance.close();
+//   };
+// };
