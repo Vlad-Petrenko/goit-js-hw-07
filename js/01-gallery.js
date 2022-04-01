@@ -24,31 +24,32 @@ function createGalleryMarkup(imgs) {
     .join('');
 }
 
-blockGallery.onclick = evt => {
+blockGallery.addEventListener('click', onBlockGalleryClick);
+
+function onBlockGalleryClick(evt) {
+  evt.preventDefault();
+
   if (!evt.target.classList.contains('gallery__image')) {
     return;
   }
-  basicLightbox
-    .create(
-      `
-		<img width="1400" height="900" src="${evt.target.dataset.source}">
-	`
-    )
-    .show();
-  document.body.addEventListener('keydown', e => {
-    if (e.key === 'Escape') basicLightbox.visible();
-  });
-};
-// window.addEventListener('keydown', onClose);
-// export const onCloseEsc = instance => {
-//   blockGallery = e => {
-//     if (esc(e.keyCode) === true) instance.close;
-//   };
-//   console.log(blockGallery);
-// };
 
-// export const closeOnEsc = instance => {
-//   document.onkeydown = e => {
-//     if (esc(e.keyCode) === true) instance.close();
-//   };
-// };
+  const instance = basicLightbox.create(
+    `
+  <img src="${evt.target.dataset.source}">`,
+    {
+      onShow: instance => {
+        window.addEventListener('keydown', closeModalEscKey);
+      },
+      onClose: instance => {
+        window.removeEventListener('keydown', closeModalEscKey);
+      },
+    }
+  );
+  instance.show();
+
+  function closeModalEscKey(evt) {
+    if (evt.code === 'Escape') {
+      instance.close();
+    }
+  }
+}
