@@ -10,16 +10,8 @@ blockGallery.insertAdjacentHTML('beforeend', createGallary);
 function createGalleryMarkup(imgs) {
   return imgs
     .map(({ preview, original, description }) => {
-      return `<div class="gallery__item">
-  <a class="gallery__link" href="${original}" onclick="return false">
-    <img
-      class="gallery__image"
-      src="${preview}"
-      data-source="${original}"
-      alt="${description}"
-    />
-  </a>
-</div>`;
+      return `<a class="gallery__item" href="${original}">
+  <img class="gallery__image" src="${preview}" alt="${description}" /></a>`;
     })
     .join('');
 }
